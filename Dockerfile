@@ -9,9 +9,10 @@ RUN apk update && \
         libevent \
         openssh-keygen
 
-ADD backtrace.patch /backtrace.patch
-ADD message.sh /tmp/message.sh
-ADD tmate-slave.sh /tmate-slave.sh
+
+FROM base AS build
+
+ADD backtrace.patch /
 
 RUN apk add --no-cache --virtual build-dependencies \
         build-base \
@@ -19,8 +20,6 @@ RUN apk add --no-cache --virtual build-dependencies \
         bash \
         wget \
         git \
-        openssh \
-        libc6-compat \
         automake \
         autoconf \
         zlib-dev \
@@ -28,7 +27,10 @@ RUN apk add --no-cache --virtual build-dependencies \
         msgpack-c-dev \
         ncurses-dev \
         libexecinfo-dev \
-        libssh-dev && \
+        cmake \
+        openssl-dev \
+        libgcrypt-dev \
+        mbedtls-dev && \
     mkdir /src && \
     git clone https://github.com/tmate-io/tmate-slave.git /src/tmate-server && \
     cd /src/tmate-server && \

@@ -1,15 +1,13 @@
-FROM alpine:edge
-MAINTAINER Yann Hodique <hodiquey@vmware.com>
+FROM alpine:edge AS base
 
-RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories && \
-    apk update && \
+RUN apk update && \
     apk upgrade && \
     apk add --no-cache \
         libc6-compat \
-        libssh \
         msgpack-c \
         ncurses-libs \
-        libevent
+        libevent \
+        openssh-keygen
 
 ADD backtrace.patch /backtrace.patch
 ADD message.sh /tmp/message.sh

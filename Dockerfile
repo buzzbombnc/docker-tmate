@@ -47,4 +47,13 @@ RUN apk add --no-cache --virtual build-dependencies \
     ./configure CFLAGS="-D_GNU_SOURCE" && \
     make -j
 
-ENTRYPOINT ["/tmate-slave.sh"]
+
+FROM base AS final
+
+ADD tmate-slave.sh /tmate-slave.sh
+ADD create_keys.sh /bin
+
+COPY --from=build /libssh/* /
+COPY --from=build /src/tmate-server/tmate-slave /bin
+
+CMD ["/tmate-slave.sh"]

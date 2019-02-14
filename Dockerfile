@@ -32,6 +32,14 @@ RUN apk add --no-cache --virtual build-dependencies \
         libgcrypt-dev \
         mbedtls-dev && \
     mkdir /src && \
+    cd /src && \
+    wget https://www.libssh.org/files/0.8/libssh-0.8.6.tar.xz && \
+    tar Jxf libssh-0.8.6.tar.xz && \
+    cd libssh-0.8.6 && \
+    mkdir build && cd build && \
+    cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .. && \
+    make -j && \
+    mkdir /libssh && make install DESTDIR=/libssh && make install && \
     git clone https://github.com/tmate-io/tmate-slave.git /src/tmate-server && \
     cd /src/tmate-server && \
     git apply /backtrace.patch && \
